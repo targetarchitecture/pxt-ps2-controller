@@ -2,7 +2,7 @@
 //% category="Target Architecture"
 namespace TargetArchitecture.PS2 {
 
-    let topics: string[] = ["ps2/sticks/left", "ps2/sticks/right", "ps2/buttons", "ps2/rumble"];
+    export const Topics: string[] = ["ps2/sticks/left", "ps2/sticks/right", "ps2/buttons", "ps2/rumble"];
     let btns: string[] = ["START", "SELECT", "PAD_UP", "PAD_DOWN", "PAD_LEFT", "PAD_RIGHT", "TRIANGLE", "CROSS", "SQUARE", "CIRCLE", "L1", "R1", "L2", "R2", "L3", "R3"];
 
     export const enum Buttons {
@@ -42,23 +42,9 @@ namespace TargetArchitecture.PS2 {
 
     let pinOffset = 1000;
 
-    /**
-     * Connect the PS2 controller
-    */
-    //% subcategory="PS2"
-    //% block="Connect the PS2 controller"
-    //% weight=30
-    export function onConnectController(handler: (topic: string) => void
-    ) {
-        for (let topic of topics) {
-            handler(topic);
-        }
-    }
-
     const PS2_CONTROLLER_BUTTON_PRESSED_ANY = 6009;
     const PS2_CONTROLLER_BUTTON_PRESSED = 6010;
     //... 16 Buttons to 6026 
-
 
     /**
     * Process the PS2 MQTT messages
