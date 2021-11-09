@@ -1,3 +1,5 @@
+//% color=#FF6EC7 weight=100 icon="\uf140" block="Target Architecture"
+//% category="Target Architecture"
 namespace TargetArchitecture.PS2 {
 
     let topics: string[] = ["ps2/sticks/left", "ps2/sticks/right", "ps2/buttons", "ps2/rumble"];
@@ -46,9 +48,10 @@ namespace TargetArchitecture.PS2 {
     //% subcategory="PS2"
     //% block="Connect the PS2 controller"
     //% weight=30
-    export function connectController() {
+    export function onConnectController(handler: (topic: string) => void
+    ) {
         for (let topic of topics) {
-            RainbowSparkleUnicorn.IoT.listen(topic);
+            handler(topic);
         }
     }
 
