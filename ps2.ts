@@ -2,8 +2,8 @@
 //% category="Target Architecture"
 namespace TargetArchitecture.PS2 {
 
-    export const Topics: string[] = ["ps2/sticks/left", "ps2/sticks/right", "ps2/buttons", "ps2/rumble"];
-    let btns: string[] = ["START", "SELECT", "PAD_UP", "PAD_DOWN", "PAD_LEFT", "PAD_RIGHT", "TRIANGLE", "CROSS", "SQUARE", "CIRCLE", "L1", "R1", "L2", "R2", "L3", "R3"];
+    const topics: string[] = ["ps2/sticks/left", "ps2/sticks/right", "ps2/buttons", "ps2/rumble"];
+    const btns: string[] = ["START", "SELECT", "PAD_UP", "PAD_DOWN", "PAD_LEFT", "PAD_RIGHT", "TRIANGLE", "CROSS", "SQUARE", "CIRCLE", "L1", "R1", "L2", "R2", "L3", "R3"];
 
     export const enum Buttons {
         //% block="START"
@@ -54,8 +54,8 @@ namespace TargetArchitecture.PS2 {
     //% weight=30
     export function onConnectController(handler: (topic: string) => void
     ) {
-        for (let i = 0; i < Topics.length; i++) {
-            let topic = Topics[i];
+        for (let i = 0; i < topics.length; i++) {
+            let topic = topics[i];
             handler(topic);
         }
     }
@@ -124,5 +124,21 @@ namespace TargetArchitecture.PS2 {
             }
         );
     }
+
+
+    /**
+     * Rumble the PS2 controller
+    */
+    //% subcategory="PS2"
+    //% block="Rumble the PS2 controller"
+    //% weight=30
+    export function Rumble(handler: (topic: string) => void
+    ) {
+        for (let i = 0; i < topics.length; i++) {
+            let topic = topics[i];
+            handler(topic);
+        }
+    }
+
 
 }
