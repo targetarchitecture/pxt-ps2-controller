@@ -47,6 +47,21 @@ namespace TargetArchitecture.PS2 {
     //... 16 Buttons to 6026 
 
     /**
+     * Connect the PS2 controller
+    */
+    //% subcategory="PS2"
+    //% block="Connect the PS2 controller"
+    //% weight=30
+    export function onConnectController(handler: (topic: string) => void
+    ) {
+        for (let i = 0; i < Topics.length; i++) {
+            let topic = Topics[i];
+            handler(topic);
+        }
+    }
+
+
+    /**
     * Process the PS2 MQTT messages
     * @param topic of the MQTT message
     * @param message the MQTT message
