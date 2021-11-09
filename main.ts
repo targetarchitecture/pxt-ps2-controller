@@ -4,38 +4,38 @@ namespace TargetArchitecture.PS2 {
     let topics: string[] = ["ps2/sticks/left", "ps2/sticks/right", "ps2/buttons", "ps2/rumble", "ps2/info", "ps2/ip", "ps2/dial", "ps2/error"];
 
     export declare const enum Buttons {
-        //% block="Pin 0"
-        P0 = 0,
-        //% block="Pin 1"
-        P1 = 1,
-        //% block="Pin 2"
-        P2 = 2,
-        //% block="Pin 3"
-        P3 = 3,
-        //% block="Pin 4"
-        P4 = 4,
-        //% block="Pin 5"
-        P5 = 5,
-        //% block="Pin 6"
-        P6 = 6,
-        //% block="Pin 7"
-        P7 = 7,
-        //% block="Pin 8"
-        P8 = 8,
-        //% block="Pin 9"
-        P9 = 9,
-        //% block="Pin 10"
-        P10 = 10,
-        //% block="Pin 11"
-        P11 = 11,
-        //% block="Pin 12"
-        P12 = 12,
-        //% block="Pin 13"
-        P13 = 13,
-        //% block="Pin 14"
-        P14 = 14,
-        //% block="Pin 15"
-        P15 = 15
+        //% block="START"
+        START = 0,
+        //% block="SELECT"
+        SELECT = 1,
+        //% block="PAD_UP"
+        PAD_UP = 2,
+        //% block="PAD_DOWN"
+        PAD_DOWN = 3,
+        //% block="PAD_LEFT"
+        PAD_LEFT = 4,
+        //% block="PAD_RIGHT"
+        PAD_RIGHT = 5,
+        //% block="TRIANGLE"
+        TRIANGLE = 6,
+        //% block="CROSS"
+        CROSS = 7,
+        //% block="SQUARE"
+        SQUARE = 8,
+        //% block="CIRCLE"
+        CIRCLE = 9,
+        //% block="L1"
+        L1 = 10,
+        //% block="R1"
+        R1 = 11,
+        //% block="L2"
+        L2 = 12,
+        //% block="R2"
+        R2 = 13,
+        //% block="L3"
+        L3 = 14,
+        //% block="R3"
+        R3 = 15
     }
 
     let pinOffset = 1000;
@@ -46,53 +46,34 @@ namespace TargetArchitecture.PS2 {
         }
     }
 
+    export const PS2_CONTROLLER_BUTTON_PRESSED_ANY = 6009;
+    export const PS2_CONTROLLER_BUTTON_PRESSED = 6010;
+    //... 16 Buttons to 6026 
+
     export function processNewMQTTMessage(message: string) {
         if (message.includes("PAD_LEFT")) {
+            control.raiseEvent(PS2_CONTROLLER_BUTTON_PRESSED + pin, pin + pinOffset)
+            control.raiseEvent(PS2_CONTROLLER_BUTTON_PRESSED_ANY, pin + pinOffset)
+
         }
     }
 
 
-    export function _dealWithSwitchUpdateMessage(switchStates: string) {
-
-        if (_previousSwitchStates.charAt(0) != "0") {
-
-            for (let pin = 0; pin < 16; pin++) {
-
-                const pinState = switchStates.charAt(pin);
-                const previousPinState = _previousSwitchStates.charAt(pin);
-
-                if (pinState.compare(previousPinState) != 0) {
-
-                    if (pinState.compare("L") == 0) {
-
-                        control.raiseEvent(RAINBOW_SPARKLE_UNICORN_SWITCH_PRESSED + pin, pin + pinOffset)
-                        control.raiseEvent(RAINBOW_SPARKLE_UNICORN_SWITCH_PRESSED_ANY, pin + pinOffset)
-
-                    } else if (pinState.compare("H") == 0) {
-                        control.raiseEvent(RAINBOW_SPARKLE_UNICORN_SWITCH_RELEASED + pin, pin + pinOffset)
-                        control.raiseEvent(RAINBOW_SPARKLE_UNICORN_SWITCH_RELEASED_ANY, pin + pinOffset)
-                    }
-                }
-            }
-        }
-
-        _previousSwitchStates = switchStates;
-    }
 
     /**
  * Do something when a switch is pushed.
- * @param pin the switch pin to be checked
- * @param handler body code to run when the event is raised
+ * @param btn the controller button to be checked
+ * @param handler body code to run when the button is pressed
  */
-    //% subcategory="Switch"
-    //% block="on switch pressed %pin"
+    //% subcategory="Button"
+    //% block="on button %btn"
     //% weight=65
     export function onPressed(
-        pin: Pins,
+        btn: Buttons,
         handler: () => void
     ) {
         control.onEvent(
-            RAINBOW_SPARKLE_UNICORN_SWITCH_PRESSED + pin,
+            PS2_CONTROLLER_BUTTON_PRESSED + btn,
             EventBusValue.MICROBIT_EVT_ANY,
             () => {
                 handler();
@@ -102,17 +83,17 @@ namespace TargetArchitecture.PS2 {
     }
 
     /**
-* Do something when any switch is pushed.
-* @param handler body code to run when the event is raised
+* Do something when any button is pressed.
+* @param handler body code to run when any button is pressed
 */
-    //% subcategory="Switch"
-    //% block="on any switch pressed"
+    //% subcategory="Button"
+    //% block="on any any button"
     //% weight=65
     export function onAnyPressed(
-        handler: (pin: number) => void
+        handler: (btn: Buttons) => void
     ) {
         control.onEvent(
-            RAINBOW_SPARKLE_UNICORN_SWITCH_PRESSED_ANY,
+            PS2_CONTROLLER_BUTTON_PRESSED_ANY,
             EventBusValue.MICROBIT_EVT_ANY,
             () => {
                 handler(control.eventValue() - pinOffset);
