@@ -44,6 +44,7 @@ namespace TargetArchitecture.PS2 {
      * Connect the PS2 controller
     */
     //% subcategory="PS2"
+    //% block="Connect the PS2 controller"
     //% weight=30
     export function connectController() {
         for (let topic of topics) {
