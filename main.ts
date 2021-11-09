@@ -38,6 +38,8 @@ namespace TargetArchitecture.PS2 {
         P15 = 15
     }
 
+    let pinOffset = 1000;
+
     export function connectController() {
         for (let topic of topics) {
             RainbowSparkleUnicorn.IoT.listen(topic);
@@ -48,4 +50,74 @@ namespace TargetArchitecture.PS2 {
         if (message.includes("PAD_LEFT")) {
         }
     }
+
+
+    export function _dealWithSwitchUpdateMessage(switchStates: string) {
+
+        if (_previousSwitchStates.charAt(0) != "0") {
+
+            for (let pin = 0; pin < 16; pin++) {
+
+                const pinState = switchStates.charAt(pin);
+                const previousPinState = _previousSwitchStates.charAt(pin);
+
+                if (pinState.compare(previousPinState) != 0) {
+
+                    if (pinState.compare("L") == 0) {
+
+                        control.raiseEvent(RAINBOW_SPARKLE_UNICORN_SWITCH_PRESSED + pin, pin + pinOffset)
+                        control.raiseEvent(RAINBOW_SPARKLE_UNICORN_SWITCH_PRESSED_ANY, pin + pinOffset)
+
+                    } else if (pinState.compare("H") == 0) {
+                        control.raiseEvent(RAINBOW_SPARKLE_UNICORN_SWITCH_RELEASED + pin, pin + pinOffset)
+                        control.raiseEvent(RAINBOW_SPARKLE_UNICORN_SWITCH_RELEASED_ANY, pin + pinOffset)
+                    }
+                }
+            }
+        }
+
+        _previousSwitchStates = switchStates;
+    }
+
+    /**
+ * Do something when a switch is pushed.
+ * @param pin the switch pin to be checked
+ * @param handler body code to run when the event is raised
+ */
+    //% subcategory="Switch"
+    //% block="on switch pressed %pin"
+    //% weight=65
+    export function onPressed(
+        pin: Pins,
+        handler: () => void
+    ) {
+        control.onEvent(
+            RAINBOW_SPARKLE_UNICORN_SWITCH_PRESSED + pin,
+            EventBusValue.MICROBIT_EVT_ANY,
+            () => {
+                handler();
+            }
+        );
+
+    }
+
+    /**
+* Do something when any switch is pushed.
+* @param handler body code to run when the event is raised
+*/
+    //% subcategory="Switch"
+    //% block="on any switch pressed"
+    //% weight=65
+    export function onAnyPressed(
+        handler: (pin: number) => void
+    ) {
+        control.onEvent(
+            RAINBOW_SPARKLE_UNICORN_SWITCH_PRESSED_ANY,
+            EventBusValue.MICROBIT_EVT_ANY,
+            () => {
+                handler(control.eventValue() - pinOffset);
+            }
+        );
+    }
+
 }
