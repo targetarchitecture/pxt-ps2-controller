@@ -135,6 +135,6 @@ namespace TargetArchitecture.PS2 {
     export function Rumble(intensity: number = 100, 
     handler: (topic: string, message: string) => void
     ) {
-        handler("topic", intensity.toString());
+        handler("ps2/rumble", intensity.toString());
     }
 }
