@@ -132,13 +132,9 @@ namespace TargetArchitecture.PS2 {
     //% subcategory="PS2"
     //% block="Rumble the PS2 controller"
     //% weight=30
-    export function Rumble(handler: (topic: string) => void
+    export function Rumble(intensity: number = 100, 
+    handler: (topic: string, message: string) => void
     ) {
-        for (let i = 0; i < topics.length; i++) {
-            let topic = topics[i];
-            handler(topic);
-        }
+        handler("topic", intensity.toString());
     }
-
-
 }
